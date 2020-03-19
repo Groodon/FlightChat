@@ -1,0 +1,44 @@
+<div class="form-container">
+  <form [formGroup]="commentForm" #formDirective="ngForm" (submit)="submitComment(formDirective)">
+    <mat-form-field class="form-field" >
+      <mat-label> Comment
+      </mat-label>
+      <textarea matInput formControlName="comment" required cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5"></textarea>
+      <mat-error *ngIf="commentForm.controls.comment.touched && commentForm.controls.comment.invalid">
+        <span *ngIf="commentForm.controls.comment.errors.required">This field is mandatory.</span>
+      </mat-error>
+    </mat-form-field>
+    <br/>
+    <mat-form-field class="chip-list">
+      <mat-label>Tags</mat-label>
+      <mat-chip-list #chipList aria-label="Tag selection">
+        <mat-chip *ngFor="let tag of tags" [selectable]="selectable"
+                  [removable]="removable" (removed)="removeTag(tag)">
+          {{tag}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input [disabled]="addCommentLoading"
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="addTag($event)">
+      </mat-chip-list>
+    </mat-form-field>
+    <br/>
+    <div class="button-row">
+      <div class="button-container">
+        <div class="spinner-container" *ngIf="addCommentLoading">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+        <button mat-raised-button color="primary" type="submit" [disabled]="addCommentLoading">
+          Add a comment...
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
