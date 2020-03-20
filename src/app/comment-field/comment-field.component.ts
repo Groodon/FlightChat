@@ -35,6 +35,8 @@ export class CommentFieldComponent implements OnInit, OnDestroy {
     }
 
     this.route.params.subscribe((params) => {
+      // Remove comments when switching flight
+      this.comments = [];
       this.flightId = +params.id;
       this.commentForm = this.formBuilder.group({
         comment: [null, [Validators.required]]
@@ -48,7 +50,6 @@ export class CommentFieldComponent implements OnInit, OnDestroy {
   async updateComments() {
     const promise = new Promise((resolve, reject) => {
       this.cs.getAllComments(this.flightId).subscribe((data: FlightComment[]) => {
-        console.log(data);
         this.comments = data;
         resolve();
       });
