@@ -50,6 +50,16 @@ export class CommentFieldComponent implements OnInit, OnDestroy {
   async updateComments() {
     const promise = new Promise((resolve, reject) => {
       this.cs.getAllComments(this.flightId).subscribe((data: FlightComment[]) => {
+        let now = new Date();
+        data.sort(function (a, b) {
+          if (a.date >= b.date) {
+              return -1;
+          }
+          if (b.date > a.date) {
+              return 1;
+          }
+          return 0;
+      });
         this.comments = data;
         resolve();
       });
